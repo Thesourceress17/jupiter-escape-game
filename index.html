@@ -67,14 +67,14 @@
         }
         
         .board-square {
-            width: 60px;
-            height: 60px;
+            width: 55px;
+            height: 55px;
             border: 2px solid #4b5563;
             border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: bold;
             position: relative;
         }
@@ -87,22 +87,22 @@
         .player-piece {
             position: absolute;
             bottom: 2px;
-            width: 10px;
-            height: 10px;
+            width: 9px;
+            height: 9px;
             border-radius: 50%;
             border: 1px solid white;
         }
         
         .player-1 { background-color: #3b82f6; left: 4px; }
-        .player-2 { background-color: white; left: 16px; border-color: #4b5563; }
-        .player-3 { background-color: #22c55e; left: 28px; }
-        .player-4 { background-color: #a855f7; left: 40px; }
+        .player-2 { background-color: white; left: 14px; border-color: #4b5563; }
+        .player-3 { background-color: #22c55e; left: 24px; }
+        .player-4 { background-color: #a855f7; left: 34px; }
         
         .warning-icon {
             position: absolute;
             top: 2px;
             right: 2px;
-            font-size: 10px;
+            font-size: 9px;
         }
         
         .players-grid {
@@ -329,9 +329,9 @@
         
         @media (max-width: 768px) {
             .board-square {
-                width: 45px;
-                height: 45px;
-                font-size: 10px;
+                width: 40px;
+                height: 40px;
+                font-size: 9px;
             }
             
             .title {
@@ -355,7 +355,7 @@
 
         <!-- לוח המשחק -->
         <div class="board-container">
-            <h3 class="board-title">🛤️ מסלול הבריחה מכוכב צדק</h3>
+            <h3 class="board-title">🛤️ מסלול הבריחה מכוכב צדק (35 משבצות)</h3>
             <div class="board" id="gameBoard">
                 <!-- הלוח ייבנה ב-JavaScript -->
             </div>
@@ -394,10 +394,11 @@
         <div class="rules">
             <h3 style="margin-bottom: 16px;">📋 כללי המשחק</h3>
             <div style="font-size: 0.9rem; line-height: 1.6;">
-                <p style="margin-bottom: 8px;"><strong>מטרה:</strong> להיות הראשון להגיע למשבצת 24 - שיגור מוצלח מכוכב צדק!</p>
+                <p style="margin-bottom: 8px;"><strong>מטרה:</strong> להיות הראשון להגיע למשבצת 34 - שיגור מוצלח מכוכב צדק!</p>
                 <p style="margin-bottom: 8px;"><strong>איך משחקים:</strong> 1️⃣ לוחצים "הטל קובייה וזוז" ← 2️⃣ השחקן זז אוטומטית ← 3️⃣ אם נחתת על משבצת אדומה, פותרים דילמה</p>
+                <p style="margin-bottom: 8px;"><strong>קובייה חכמה:</strong> המשחק מכוון אותך לדילמות כדי ללמוד יותר פיזיקה!</p>
                 <p style="margin-bottom: 8px;"><strong>תור בונוס:</strong> אם פתרת דילמה נכון - מקבלת תור נוסף! הכפתור יהפוך לירוק ותוכלי להטיל שוב!</p>
-                <p style="margin-bottom: 8px;"><strong>דילמות:</strong> משבצות אדומות עם ⚠️ (יש 10 כאלה!) דורשות פתרון בעיות הנדסיות</p>
+                <p style="margin-bottom: 8px;"><strong>דילמות:</strong> משבצות אדומות עם ⚠️ (יש 13 כאלה!) דורשות פתרון בעיות הנדסיות מדעיות</p>
                 <p style="margin-bottom: 8px;"><strong>רמזים:</strong> לוחצים על כפתור הרמז לעזרה (מורידים 1 נקודה)</p>
                 <p><strong>ניקוד:</strong> תשובה מצוינת = תור בונוס + 3 צעדי קדימה + נקודות</p>
             </div>
@@ -424,12 +425,12 @@
     </div>
 
     <script>
-        // נתוני המשחק
+        // נתוני המשחק - לוח גדול יותר
         let players = [
-            { id: 1, name: 'מהנדס 1', position: 0, energy: 10, parts: 5, knowledge: 3, score: 0, color: 'player-1' },
-            { id: 2, name: 'מהנדסת 2', position: 0, energy: 10, parts: 5, knowledge: 3, score: 0, color: 'player-2' },
-            { id: 3, name: 'מהנדס 3', position: 0, energy: 10, parts: 5, knowledge: 3, score: 0, color: 'player-3' },
-            { id: 4, name: 'מהנדסת 4', position: 0, energy: 10, parts: 5, knowledge: 3, score: 0, color: 'player-4' }
+            { id: 1, name: 'מהנדס 1', position: 0, energy: 10, parts: 5, knowledge: 3, score: 0, color: 'player-1', turnsSinceDilemma: 0 },
+            { id: 2, name: 'מהנדסת 2', position: 0, energy: 10, parts: 5, knowledge: 3, score: 0, color: 'player-2', turnsSinceDilemma: 0 },
+            { id: 3, name: 'מהנדס 3', position: 0, energy: 10, parts: 5, knowledge: 3, score: 0, color: 'player-3', turnsSinceDilemma: 0 },
+            { id: 4, name: 'מהנדסת 4', position: 0, energy: 10, parts: 5, knowledge: 3, score: 0, color: 'player-4', turnsSinceDilemma: 0 }
         ];
 
         let currentPlayer = 0;
@@ -442,44 +443,173 @@
         let answerFeedback = null;
         let explanation = '';
 
-        const boardPositions = 25;
-        const dilemmaSquares = [2, 4, 6, 8, 10, 12, 15, 17, 19, 22];
+        const boardPositions = 35; // הלוח הגדול יותר
+        const dilemmaSquares = [3, 6, 9, 12, 15, 18, 21, 24, 27, 30, 33, 16, 25]; // 13 דילמות
 
+        // קלפי ידע מדעיים יותר
         const knowledgeCards = [
-            { id: 1, type: 'basic', name: 'חוקי ניוטון', description: 'חוק התנועה הראשון, השני והשלישי', icon: '🔬', hint: 'חשבו על מה קורה כשאתם דוחפים משהו חזק - הוא דוחף אתכם בחזרה. זה עוזר ברקטות!' },
-            { id: 2, type: 'basic', name: 'מהירות ותאוצה', description: 'כמה מהר זזים וכמה מהר מתחילים לזוז', icon: '⚡', hint: 'כמו רכב שמאיץ - ככל שיש יותר כוח, כך יותר מהר מגיעים למהירות גבוהה' },
-            { id: 3, type: 'basic', name: 'כוח כבידה', description: 'הכוח שמושך חפצים למטה', icon: '🌍', hint: 'למה תפוח נופל מהעץ? אותו כוח עובד על החללית - רק שבצדק הוא הרבה יותר חזק!' },
-            { id: 4, type: 'tech', name: 'מנועי רקטה', description: 'מנועים שיוצרים דחף חזק מאד', icon: '🚀', hint: 'כמו בלון שמשחררים - הגזים יוצאים בכיוון אחד והבלון טס לכיוון השני' },
-            { id: 5, type: 'tech', name: 'חליפות הגנה', description: 'בגדים מיוחדים שמגנים מחום וקור', icon: '🛡️', hint: 'כמו מעיל חורף מיוחד שמגן גם מחום קיצוני וגם מקור - רק הרבה יותר חזק!' },
-            { id: 6, type: 'tech', name: 'מחשבי ניווט', description: 'מחשבים שעוזרים למצוא את הדרך', icon: '🧭', hint: 'כמו GPS במכונית, רק שזה עובד בחלל ומחשב איך להגיע בין כוכבי הלכת' },
-            { id: 7, type: 'coop', name: 'מכשיר קשר', description: 'דיבור בין חברי הצוות', icon: '📡', hint: 'כמו טלפון, רק שזה עובד בחלל ועוזר לכל הצוות לעבוד יחד בזמן אמת' },
-            { id: 8, type: 'coop', name: 'עבודת צוות', description: 'שיתוף פעולה בין כמה אנשים', icon: '👥', hint: 'כמו בספורט - כשכל החברים עובדים יחד, הם יכולים להשיג דברים שאף אחד לא יכול לבד' }
+            { id: 1, type: 'physics', name: 'חוקי ניוטון', description: 'כוח, תאוצה ותנועה', icon: '🔬', hint: 'חוק שלישי: לכל פעולה יש תגובה. ברקטות הגזים דוחפים החללית קדימה!' },
+            { id: 2, type: 'physics', name: 'כוח כבידה', description: 'מהירות בריחה ומסלולים', icon: '🌍', hint: 'כדי לברוח מכוכב לכת צריך להגיע למהירות בריחה - בצדק זה 60 קמ/ש!' },
+            { id: 3, type: 'physics', name: 'דינמיקת נוזלים', description: 'זרימת גזים ולחץ אטמוספרי', icon: '🌪️', hint: 'הגזים זורמים ממקום עם לחץ גבוה למקום עם לחץ נמוך' },
+            { id: 4, type: 'engineering', name: 'מנועי רקטה', description: 'דחף ויעילות מנוע', icon: '🚀', hint: 'המנוע דוחף גזים החוצה ביעילות מקסימלית כדי לחסוך דלק' },
+            { id: 5, type: 'engineering', name: 'מגנים תרמיים', description: 'הגנה מפני חום וקרינה', icon: '🛡️', hint: 'לוחות מיוחדים שמחזירים חום ומגנים על המבנה של החללית' },
+            { id: 6, type: 'engineering', name: 'מערכות ניווט', description: 'GPS חללי וחישוב מסלולים', icon: '🧭', hint: 'מחשבים מחשבים מסלולים בזמן אמת תוך התחשבות בכבידה של כוכבי לכת' },
+            { id: 7, type: 'engineering', name: 'אנטנות תקשורת', description: 'שידור אותות למרחק גדול', icon: '📡', hint: 'אנטנה מכוונת וחזקה יותר יכולה לשדר אותות למרחקים רחוקים יותר' },
+            { id: 8, type: 'teamwork', name: 'פרוטוקולי חירום', description: 'תיאום צוות במצבי לחץ', icon: '🚨', hint: 'כשיש בעיה טכנית, חשוב שכל הצוות יעבוד לפי תוכנית מתואמת' },
+            { id: 9, type: 'engineering', name: 'מערכות קירור', description: 'שליטה בטמפרטורה', icon: '❄️', hint: 'מערכת קירור פעילה מורידה חום באמצעות נוזל קירור או גזים' },
+            { id: 10, type: 'physics', name: 'אווירודינמיקה', description: 'התנגדות אוויר וזרימה', icon: '✈️', hint: 'צורה חלקה וייעול הזרימה מפחיתים התנגדות ומאפשרים תנועה מהירה יותר' }
         ];
 
+        // דילמות מדעיות יותר
         const dilemmaCards = [
-            { id: 1, title: 'החללית נהיית חמה מדי!', description: 'כשהחללית עוברת באטמוספירה של צדק, היא נהיית חמה כמו תנור. איך נגן עליה?', requiredTypes: ['basic', 'tech'], difficulty: 1 },
-            { id: 2, title: 'רוחות חזקות דוחפות אותנו!', description: 'יש רוחות של 500 קמ/ש שדוחפות את החללית הצידה. איך נשמור על כיוון נכון?', requiredTypes: ['basic', 'coop'], difficulty: 2 },
-            { id: 3, title: 'אין מספיק דלק!', description: 'כוח הכבידה של צדק חזק פי 2.5 מכדור הארץ. המנועים שלנו צריכים יותר דלק מהצפוי.', requiredTypes: ['basic', 'tech'], difficulty: 2 },
-            { id: 4, title: 'המחשבים מתקלקלים!', description: 'השדה המגנטי הענק של צדק גורם למחשבים שלנו להשתגע. איך נפתור את זה?', requiredTypes: ['tech', 'coop'], difficulty: 2 },
-            { id: 5, title: 'איך נמצא את הדרך הנכונה?', description: 'צדק מוקף ב-79 ירחים! איך נחשב מסלול שלא יתנגש בהם?', requiredTypes: ['basic', 'tech'], difficulty: 1 },
-            { id: 6, title: 'הצוות פזור במקומות שונים!', description: 'חלק מהצוות בתחנת החלל וחלק בחללית. איך נתאם ביניהם?', requiredTypes: ['coop'], difficulty: 1 },
-            { id: 7, title: 'החללית רועדת מאד!', description: 'הרעידות חזקות כל כך שקשה לשלוט בחללית. מה נעשה?', requiredTypes: ['basic', 'tech'], difficulty: 2 },
-            { id: 8, title: 'הגזים הרעילים של צדק!', description: 'האטמוספירה של צדק מכילה גזים מסוכנים שיכולים לפגוע בחללית.', requiredTypes: ['tech'], difficulty: 1 },
-            { id: 9, title: 'איך נדע שהגענו למהירות נכונה?', description: 'אנחנו צריכים להגיע למהירות של 60 קמ/ש כדי לברוח מכוח הכבידה של צדק.', requiredTypes: ['basic', 'tech'], difficulty: 2 },
-            { id: 10, title: 'אבדנו קשר עם כדור הארץ!', description: 'אנחנו כל כך רחוק מכדור הארץ שאין לנו קשר רדיו. מה נעשה?', requiredTypes: ['coop', 'tech'], difficulty: 2 }
+            { 
+                id: 1, 
+                title: 'חום קיצוני פוגע בחללית!', 
+                description: 'החללית מתחממת ל-800 מעלות צלזיוס כשחודרת לאטמוספירה של צדק. הרכיבים מתחילים להימס!', 
+                requiredTypes: ['physics', 'engineering'], 
+                difficulty: 2,
+                keywords: ['חום', 'הגנה', 'מגן', 'תרמי', 'קירור', 'טמפרטורה']
+            },
+            { 
+                id: 2, 
+                title: 'רוחות של 500 קמ/ש מסיטות אותנו!', 
+                description: 'סופות ענק בצדק יוצרות רוחות חזקות שדוחפות את החללית למסלול מסוכן לעבר הירחים שלו.', 
+                requiredTypes: ['physics', 'engineering'], 
+                difficulty: 2,
+                keywords: ['רוח', 'ניווט', 'כיוון', 'מסלול', 'שליטה', 'דינמיקה']
+            },
+            { 
+                id: 3, 
+                title: 'כוח הכבידה חזק מדי למנועים!', 
+                description: 'כוח הכבידה של צדק פי 2.5 מכדור הארץ. המנועים שלנו לא מספיק חזקים להגיע למהירות בריחה!', 
+                requiredTypes: ['physics', 'engineering'], 
+                difficulty: 3,
+                keywords: ['כבידה', 'מנוע', 'דחף', 'מהירות', 'כוח', 'ניוטון']
+            },
+            { 
+                id: 4, 
+                title: 'קרינה מגנטית פוגעת במחשבים!', 
+                description: 'השדה המגנטי הענק של צדק גורם למערכות האלקטרוניקה להשתגע ולמחשבים לקרוס.', 
+                requiredTypes: ['engineering', 'teamwork'], 
+                difficulty: 2,
+                keywords: ['מגנטי', 'הגנה', 'אלקטרוניקה', 'מגן', 'קרינה']
+            },
+            { 
+                id: 5, 
+                title: 'איך לחשב מסלול בין 79 ירחים?', 
+                description: 'צדק מוקף ב-79 ירחים שמשפיעים על המסלול שלנו. איך נחשב נתיב בטוח שלא יתנגש בהם?', 
+                requiredTypes: ['physics', 'engineering'], 
+                difficulty: 2,
+                keywords: ['מסלול', 'ניווט', 'חישוב', 'כבידה', 'GPS']
+            },
+            { 
+                id: 6, 
+                title: 'תיקונים דחופים מחוץ לחללית!', 
+                description: 'יש תיקונים שצריך לבצע על גוף החללית. האסטרונאוט צריך לצאת החוצה - האם החליפה תגן בקרינה ובטמפרטורות קיצוניות של צדק?', 
+                requiredTypes: ['engineering', 'teamwork'], 
+                difficulty: 2,
+                keywords: ['חליפה', 'הגנה', 'קרינה', 'טמפרטורה', 'בטיחות']
+            },
+            { 
+                id: 7, 
+                title: 'רעידות חזקות פוגעות ביציבות!', 
+                description: 'הרעידות והזעזועים מהאטמוספירה הסוערת גורמים לחללית לרעוד בצורה מסוכנת. איך נשמור על יציבות?', 
+                requiredTypes: ['physics', 'engineering'], 
+                difficulty: 2,
+                keywords: ['רעידה', 'יציבות', 'שליטה', 'אווירודינמיקה', 'זרימה']
+            },
+            { 
+                id: 8, 
+                title: 'גזים רעילים חודרים לחללית!', 
+                description: 'גזי המתאן והאמוניה של צדק רעילים ומסוכנים. הם חודרים דרך נקבים קטנים במערכת אוורור!', 
+                requiredTypes: ['engineering'], 
+                difficulty: 1,
+                keywords: ['גזים', 'הגנה', 'אטימה', 'סינון', 'בטיחות']
+            },
+            { 
+                id: 9, 
+                title: 'איך למדוד מהירות בריחה?', 
+                description: 'אנחנו צריכים להגיע למהירות של 60 קמ/ש כדי לברוח מכוח הכבידה של צדק. איך נדע בדיוק שהגענו למהירות הנכונה?', 
+                requiredTypes: ['physics', 'engineering'], 
+                difficulty: 2,
+                keywords: ['מהירות', 'מדידה', 'ניווט', 'חישוב', 'כבידה']
+            },
+            { 
+                id: 10, 
+                title: 'איבדנו קשר רדיו עם כדור הארץ!', 
+                description: 'המרחק הענק מכדור הארץ (550 מיליון ק"מ) גורם לאובדן קשר רדיו. איך נשדר אותות בהספק מספיק?', 
+                requiredTypes: ['engineering', 'teamwork'], 
+                difficulty: 2,
+                keywords: ['אנטנה', 'תקשורת', 'רדיו', 'הספק', 'שידור']
+            },
+            { 
+                id: 11, 
+                title: 'דלק מתקפא בטמפרטורות קיצוניות!', 
+                description: 'הטמפרטורה בחלל הרחוק מהשמש יורדת ל-180 מעלות מתחת לאפס. הדלק מתקפא וחוסם את הצינורות!', 
+                requiredTypes: ['physics', 'engineering'], 
+                difficulty: 2,
+                keywords: ['קור', 'דלק', 'חימום', 'זרימה', 'טמפרטורה']
+            },
+            { 
+                id: 12, 
+                title: 'לחץ אטמוספרי הורס את המבנה!', 
+                description: 'הלחץ האטמוספרי של צדק פי 100 מכדור הארץ! המבנה של החללית מתחיל להתעוות ולהיסדק.', 
+                requiredTypes: ['physics', 'engineering'], 
+                difficulty: 3,
+                keywords: ['לחץ', 'מבנה', 'חוזק', 'עמידות', 'דינמיקה']
+            },
+            { 
+                id: 13, 
+                title: 'מערכות חיוניות נכשלות בו-זמנית!', 
+                description: 'מערכת הניווט, הקירור והתקשורת נכשלות באותו הזמן! איך נתעדף את התיקונים בזמן קצר?', 
+                requiredTypes: ['teamwork', 'engineering'], 
+                difficulty: 3,
+                keywords: ['חירום', 'עדיפות', 'תיאום', 'פרוטוקול', 'תיקון']
+            }
         ];
 
-        // בניית הלוח
+        // מכניקת קובייה חכמה - מכוונת לדילמות
+        function smartDiceRoll() {
+            const player = players[currentPlayer];
+            let roll = Math.floor(Math.random() * 6) + 1;
+            
+            // אם השחקן לא פגש דילמה 3 תורות - הגדל סיכוי לדילמה
+            if (player.turnsSinceDilemma >= 3) {
+                // מצא את הדילמה הקרובה ביותר
+                const currentPos = player.position;
+                const nextDilemmas = dilemmaSquares.filter(d => d > currentPos).sort((a, b) => a - b);
+                
+                if (nextDilemmas.length > 0) {
+                    const nextDilemma = nextDilemmas[0];
+                    const distanceToNext = nextDilemma - currentPos;
+                    
+                    // אם הדילמה הבאה במרחק של 1-6, יש סיכוי גבוה להגיע אליה
+                    if (distanceToNext <= 6) {
+                        const favoredRoll = distanceToNext;
+                        if (Math.random() < 0.6) { // 60% סיכוי לקבל את הקובייה המועדפת
+                            roll = favoredRoll;
+                        }
+                    }
+                }
+            }
+            
+            return roll;
+        }
+
+        // בניית הלוח - 7 שורות במקום 5
         function buildBoard() {
             const board = document.getElementById('gameBoard');
             board.innerHTML = '';
 
-            for (let row = 0; row < 5; row++) {
+            const rows = 7;
+            const cols = 5;
+
+            for (let row = 0; row < rows; row++) {
                 const rowDiv = document.createElement('div');
                 rowDiv.className = 'board-row';
 
-                for (let col = 0; col < 5; col++) {
-                    const position = row * 5 + (row % 2 === 0 ? col : 4 - col);
+                for (let col = 0; col < cols; col++) {
+                    const position = row * cols + (row % 2 === 0 ? col : cols - 1 - col);
                     if (position >= boardPositions) continue;
 
                     const square = document.createElement('div');
@@ -600,11 +730,11 @@
             `;
         }
 
-        // הטלת קובייה ותנועה
+        // הטלת קובייה ותנועה - עם הקובייה החכמה
         function handlePlayerTurn() {
             if (currentDilemma) return;
 
-            diceValue = Math.floor(Math.random() * 6) + 1;
+            diceValue = smartDiceRoll(); // השתמש בקובייה החכמה
             addLog(`${players[currentPlayer].name} הטיל קובייה וקיבל: ${diceValue}`);
             
             movePlayer(diceValue);
@@ -630,6 +760,13 @@
             const player = players[currentPlayer];
             const newPosition = Math.min(player.position + steps, boardPositions - 1);
             player.position = newPosition;
+
+            // עדכון מונה תורות מבלי דילמה
+            if (!dilemmaSquares.includes(newPosition)) {
+                player.turnsSinceDilemma++;
+            } else {
+                player.turnsSinceDilemma = 0; // איפוס המונה
+            }
 
             // בדיקת דילמה
             if (dilemmaSquares.includes(newPosition)) {
@@ -691,7 +828,7 @@
                     
                     <div style="margin: 16px 0;">
                         <label style="font-weight: bold; display: block; margin-bottom: 8px;">הסבר את הפתרון שלך (לפחות 30 תווים):</label>
-                        <textarea id="explanationText" placeholder="למשל: אני בוחר קלף 'חליפות הגנה' כי הן מגנות על החללית מפני החום הקיצוני..." onInput="updateExplanation()"></textarea>
+                        <textarea id="explanationText" placeholder="למשל: אני בוחר 'מגנים תרמיים' כי הם מתקינים לוחות מיוחדים על החללית שמחזירים את החום ומגנים על המבנה..." onInput="updateExplanation()"></textarea>
                         <div style="font-size: 0.8rem; color: #9ca3af; margin-top: 4px;" id="charCount">0/30 תווים מינימום</div>
                     </div>
                     
@@ -809,26 +946,13 @@
             }
         }
 
-        // הערכת התשובה
+        // הערכת התשובה - משופרת עם מילות מפתח מדעיות
         function evaluateAnswer() {
             const card = knowledgeCards.find(c => c.id === selectedCard);
             const explanationWords = explanation.trim().toLowerCase().split(' ');
 
-            const relevantKeywords = {
-                'החללית נהיית חמה מדי!': ['חום', 'הגנה', 'מגן', 'חליפה', 'בידוד'],
-                'רוחות חזקות דוחפות אותנו!': ['כיוון', 'ניווט', 'שליטה', 'כוח', 'צוות'],
-                'אין מספיק דלק!': ['כוח', 'מנוע', 'דלק', 'חזק', 'תאוצה'],
-                'המחשבים מתקלקלים!': ['מגן', 'הגנה', 'תיקון', 'צוות', 'גיבוי'],
-                'איך נמצא את הדרך הנכונה?': ['ניווט', 'מחשב', 'חישוב', 'מסלול'],
-                'הצוות פזור במקומות שונים!': ['קשר', 'תקשורת', 'רדיו', 'צוות', 'תיאום'],
-                'החללית רועדת מאד!': ['שליטה', 'יציבות', 'כוח', 'איזון'],
-                'הגזים הרעילים של צדק!': ['הגנה', 'מגן', 'חליפה', 'בטיחות'],
-                'איך נדע שהגענו למהירות נכונה?': ['מהירות', 'מדידה', 'מחשב', 'חישוב'],
-                'אבדנו קשר עם כדור הארץ!': ['קשר', 'תקשורת', 'רדיו', 'אנטנה']
-            };
-
-            const keywords = relevantKeywords[currentDilemma.title] || [];
-            const hasRelevantWords = keywords.some(keyword => 
+            // בדיקת מילות מפתח ספציפיות לכל דילמה
+            const hasRelevantWords = currentDilemma.keywords.some(keyword => 
                 explanationWords.some(word => word.includes(keyword))
             );
 
@@ -836,13 +960,13 @@
             const isLongEnough = explanation.length >= 30;
 
             if (isCorrectType && hasRelevantWords && isLongEnough) {
-                return { status: 'correct', message: '✅ תשובה מצוינת! הסברת נכון איך הקלף פותר את הבעיה.' };
+                return { status: 'correct', message: '✅ תשובה מצוינת! הסברת נכון איך הפתרון הטכני פותר את הבעיה הפיזיקלית.' };
             } else if (isCorrectType && isLongEnough) {
-                return { status: 'partial', message: '⚡ תשובה טובה! הקלף מתאים אבל ההסבר יכול להיות יותר ספציפי לבעיה.' };
+                return { status: 'partial', message: '⚡ תשובה טובה! הקלף מתאים אבל ההסבר יכול להיות יותר טכני ומדעי.' };
             } else if (isCorrectType) {
-                return { status: 'partial', message: '⚡ כיוון נכון! נסה להרחיב את ההסבר - איך בדיוק הקלף עוזר?' };
+                return { status: 'partial', message: '⚡ כיוון נכון! נסה להרחיב את ההסבר - איך בדיוק הטכנולוגיה פותרת את הבעיה?' };
             } else {
-                return { status: 'wrong', message: '❌ הקלף לא ממש מתאים לבעיה הזו. נסה לחשוב על קלף אחר או קח רמז!' };
+                return { status: 'wrong', message: '❌ הקלף לא ממש מתאים לבעיה הזו. חשוב על פתרון טכני אחר או קח רמז!' };
             }
         }
 
@@ -882,10 +1006,10 @@
         // איפוס משחק
         function resetGame() {
             players = [
-                { id: 1, name: 'מהנדס 1', position: 0, energy: 10, parts: 5, knowledge: 3, score: 0, color: 'player-1' },
-                { id: 2, name: 'מהנדסת 2', position: 0, energy: 10, parts: 5, knowledge: 3, score: 0, color: 'player-2' },
-                { id: 3, name: 'מהנדס 3', position: 0, energy: 10, parts: 5, knowledge: 3, score: 0, color: 'player-3' },
-                { id: 4, name: 'מהנדסת 4', position: 0, energy: 10, parts: 5, knowledge: 3, score: 0, color: 'player-4' }
+                { id: 1, name: 'מהנדס 1', position: 0, energy: 10, parts: 5, knowledge: 3, score: 0, color: 'player-1', turnsSinceDilemma: 0 },
+                { id: 2, name: 'מהנדסת 2', position: 0, energy: 10, parts: 5, knowledge: 3, score: 0, color: 'player-2', turnsSinceDilemma: 0 },
+                { id: 3, name: 'מהנדס 3', position: 0, energy: 10, parts: 5, knowledge: 3, score: 0, color: 'player-3', turnsSinceDilemma: 0 },
+                { id: 4, name: 'מהנדסת 4', position: 0, energy: 10, parts: 5, knowledge: 3, score: 0, color: 'player-4', turnsSinceDilemma: 0 }
             ];
             currentPlayer = 0;
             bonusTurn = false;
