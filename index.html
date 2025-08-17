@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>בריחה מכוכב צדק - משחק חינוכי</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(to bottom, #4c1d95, #000000);
+            color: white;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #fde047;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: #d1d5db;
+        }
+        
+        .board-container {
+            background: #1f2937;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+        }
+        
+        .board-title {
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+        
+        .board {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            align-items: center;
+        }
+        
+        .board-row {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .board-square {
+            width: 60px;
+            height: 60px;
+            border: 2px solid #4b5563;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+            position: relative;
+        }
+        
+        .square-start { background-color: #16a34a; }
+        .square-end { background-color: #eab308; }
+        .square-dilemma { background-color: #dc2626; }
+        .square-normal { background-color: #374151; }
+        
+        .player-piece {
+            position: absolute;
+            bottom: 2px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            border: 1px solid white;
+        }
+        
+        .player-1 { background-color: #3b82f6; left: 4px; }
+        .player-2 { background-color: white; left: 16px; border-color: #4b5563; }
+        .player-3 { background-color: #22c55e; left: 28px; }
+        .player-4 { background-color: #a855f7; left: 40px; }
+        
+        .warning-icon {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            font-size: 10px;
+        }
+        
+        .players-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 30px;
+        }
+        
+        .player-card {
+            background: #1f2937;
+            padding: 16px;
+            border-radius: 8px;
+            border: 2px solid #4b5563;
+        }
+        
+        .player-active {
+            border-color: #facc15;
+            background: rgba(250, 204, 21, 0.1);
+        }
+        
+        .player-color {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            margin-bottom: 8px;
+        }
+        
+        .scoreboard {
+            background: linear-gradient(to right, #92400e, #c2410c);
+            border: 2px solid #facc15;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+        }
+        
+        .scoreboard-title {
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #fde047;
+            margin-bottom: 20px;
+        }
+        
+        .score-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 16px;
+        }
+        
+        .score-card {
+            background: rgba(55, 65, 81, 0.5);
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .score-leader {
+            background: rgba(250, 204, 21, 0.3);
+            border: 2px solid #fde047;
+        }
+        
+        .controls {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .current-player {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+        
+        .game-button {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 8px;
+        }
+        
+        .game-button:hover {
+            background: #1d4ed8;
+        }
+        
+        .game-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .bonus-button {
+            background: #16a34a;
+        }
+        
+        .bonus-button:hover {
+            background: #15803d;
+        }
+        
+        .dilemma-modal {
+            background: rgba(0, 0, 0, 0.8);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        
+        .dilemma-content {
+            background: #1f2937;
+            border: 2px solid #ef4444;
+            border-radius: 12px;
+            padding: 24px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .dilemma-title {
+            color: #fca5a5;
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            margin: 16px 0;
+        }
+        
+        .card-button {
+            background: #374151;
+            border: 1px solid #4b5563;
+            color: white;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: right;
+            cursor: pointer;
+        }
+        
+        .card-selected {
+            background: #2563eb;
+            border-color: #60a5fa;
+        }
+        
+        .hint-box {
+            background: rgba(234, 88, 12, 0.3);
+            border: 1px solid #ea580c;
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 8px;
+            font-size: 0.9rem;
+        }
+        
+        .feedback-box {
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+        }
+        
+        .feedback-correct {
+            background: rgba(34, 197, 94, 0.3);
+            border: 1px solid #22c55e;
+        }
+        
+        .feedback-partial {
+            background: rgba(250, 204, 21, 0.3);
+            border: 1px solid #facc15;
+        }
+        
+        .feedback-wrong {
+            background: rgba(239, 68, 68, 0.3);
+            border: 1px solid #ef4444;
+        }
+        
+        .game-log {
+            background: #1f2937;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .log-entry {
+            background: #374151;
+            padding: 8px;
+            border-radius: 4px;
+            margin-bottom: 4px;
+            font-size: 0.9rem;
+        }
+        
+        .rules {
+            background: #1f2937;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        textarea {
+            width: 100%;
+            padding: 8px;
+            border-radius: 4px;
+            background: #374151;
+            border: 1px solid #4b5563;
+            color: white;
+            resize: vertical;
+            min-height: 80px;
+        }
+        
+        .legend {
+            text-align: center;
+            margin-top: 16px;
+            font-size: 0.9rem;
+            color: #d1d5db;
+        }
+        
+        @media (max-width: 768px) {
+            .board-square {
+                width: 45px;
+                height: 45px;
+                font-size: 10px;
+            }
+            
+            .title {
+                font-size: 2rem;
+            }
+            
+            .players-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- כותרת -->
+        <div class="header">
+            <h1 class="title">🚀 בריחה מכוכב צדק</h1>
+            <p class="subtitle">משחק אסטרטגיה הנדסי לתלמידים ותלמידות כיתה ח'</p>
+            <p style="font-size: 0.9rem; color: #9ca3af; margin-top: 8px;">יוצר על ידי Thesourceress17 💫</p>
+        </div>
+
+        <!-- לוח המשחק -->
+        <div class="board-container">
+            <h3 class="board-title">🛤️ מסלול הבריחה מכוכב צדק</h3>
+            <div class="board" id="gameBoard">
+                <!-- הלוח ייבנה ב-JavaScript -->
+            </div>
+            <div class="legend">
+                🏁 התחלה | ⚠️ דילמה הנדסית | 🎯 שיגור מוצלח!
+            </div>
+        </div>
+
+        <!-- מידע שחקנים -->
+        <div class="players-grid" id="playersInfo">
+            <!-- מידע השחקנים ייבנה ב-JavaScript -->
+        </div>
+
+        <!-- לוח ניקוד -->
+        <div class="scoreboard">
+            <h3 class="scoreboard-title">🏆 לוח הניקוד 🏆</h3>
+            <div class="score-grid" id="scoreBoard">
+                <!-- לוח הניקוד ייבנה ב-JavaScript -->
+            </div>
+        </div>
+
+        <!-- פקדים -->
+        <div class="controls" id="gameControls">
+            <!-- הפקדים ייבנו ב-JavaScript -->
+        </div>
+
+        <!-- יומן המשחק -->
+        <div class="game-log">
+            <h3 style="margin-bottom: 12px;">📖 יומן המשחק</h3>
+            <div id="gameLog">
+                <div class="log-entry">המשחק התחיל! בהצלחה!</div>
+            </div>
+        </div>
+
+        <!-- כללי המשחק -->
+        <div class="rules">
+            <h3 style="margin-bottom: 16px;">📋 כללי המשחק</h3>
+            <div style="font-size: 0.9rem; line-height: 1.6;">
+                <p style="margin-bottom: 8px;"><strong>מטרה:</strong> להיות הראשון להגיע למשבצת 24 - שיגור מוצלח מכוכב צדק!</p>
+                <p style="margin-bottom: 8px;"><strong>איך משחקים:</strong> 1️⃣ לוחצים "הטל קובייה וזוז" ← 2️⃣ השחקן זז אוטומטית ← 3️⃣ אם נחתת על משבצת אדומה, פותרים דילמה</p>
+                <p style="margin-bottom: 8px;"><strong>תור בונוס:</strong> אם פתרת דילמה נכון - מקבלת תור נוסף! הכפתור יהפוך לירוק ותוכלי להטיל שוב!</p>
+                <p style="margin-bottom: 8px;"><strong>דילמות:</strong> משבצות אדומות עם ⚠️ (יש 10 כאלה!) דורשות פתרון בעיות הנדסיות</p>
+                <p style="margin-bottom: 8px;"><strong>רמזים:</strong> לוחצים על כפתור הרמז לעזרה (מורידים 1 נקודה)</p>
+                <p><strong>ניקוד:</strong> תשובה מצוינת = תור בונוס + 3 צעדי קדימה + נקודות</p>
+            </div>
+        </div>
+
+        <!-- כפתור איפוס -->
+        <div style="text-align: center; border-top: 1px solid #4b5563; padding-top: 20px;">
+            <h4 style="margin-bottom: 8px;">🔄 התחלה מחדש</h4>
+            <p style="font-size: 0.9rem; color: #9ca3af; margin-bottom: 16px;">רק אם אתם רוצים להתחיל משחק חדש לחלוטין</p>
+            <button onclick="resetGame()" style="background: #dc2626; color: white; border: none; padding: 8px 16px; border-radius: 8px; font-weight: bold; cursor: pointer;">
+                🔄 איפוס מלא - משחק חדש
+            </button>
+        </div>
+    </div>
+
+    <!-- מודל דילמה -->
+    <div id="dilemmaModal" class="dilemma-modal" style="display: none;">
+        <div class="dilemma-content">
+            <h3 class="dilemma-title">🚨 דילמה הנדסית!</h3>
+            <div id="dilemmaContent">
+                <!-- תוכן הדילמה ייבנה ב-JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // נתוני המשחק
+        let players = [
+            { id: 1, name: 'מהנדס 1', position: 0, energy: 10, parts: 5, knowledge: 3, score: 0, color: 'player-1' },
+            { id: 2, name: 'מהנדסת 2', position: 0, energy: 10, parts: 5, knowledge: 3, score: 0, color: 'player-2' },
+            { id: 3, name: 'מהנדס 3', position: 0, energy: 10, parts: 5, knowledge: 3, score: 0, color: 'player-3' },
+            { id: 4, name: 'מהנדסת 4', position: 0, energy: 10, parts: 5, knowledge: 3, score: 0, color: 'player-4' }
+        ];
+
+        let currentPlayer = 0;
+        let diceValue = 1;
+        let gameLog = [];
+        let bonusTurn = false;
+        let selectedCard = null;
+        let currentDilemma = null;
+        let showHint = false;
+        let answerFeedback = null;
+        let explanation = '';
+
+        const boardPositions = 25;
+        const dilemmaSquares = [2, 4, 6, 8, 10, 12, 15, 17, 19, 22];
+
+        const knowledgeCards = [
+            { id: 1, type: 'basic', name: 'חוקי ניוטון', description: 'חוק התנועה הראשון, השני והשלישי', icon: '🔬', hint: 'חשבו על מה קורה כשאתם דוחפים משהו חזק - הוא דוחף אתכם בחזרה. זה עוזר ברקטות!' },
+            { id: 2, type: 'basic', name: 'מהירות ותאוצה', description: 'כמה מהר זזים וכמה מהר מתחילים לזוז', icon: '⚡', hint: 'כמו רכב שמאיץ - ככל שיש יותר כוח, כך יותר מהר מגיעים למהירות גבוהה' },
+            { id: 3, type: 'basic', name: 'כוח כבידה', description: 'הכוח שמושך חפצים למטה', icon: '🌍', hint: 'למה תפוח נופל מהעץ? אותו כוח עובד על החללית - רק שבצדק הוא הרבה יותר חזק!' },
+            { id: 4, type: 'tech', name: 'מנועי רקטה', description: 'מנועים שיוצרים דחף חזק מאד', icon: '🚀', hint: 'כמו בלון שמשחררים - הגזים יוצאים בכיוון אחד והבלון טס לכיוון השני' },
+            { id: 5, type: 'tech', name: 'חליפות הגנה', description: 'בגדים מיוחדים שמגנים מחום וקור', icon: '🛡️', hint: 'כמו מעיל חורף מיוחד שמגן גם מחום קיצוני וגם מקור - רק הרבה יותר חזק!' },
+            { id: 6, type: 'tech', name: 'מחשבי ניווט', description: 'מחשבים שעוזרים למצוא את הדרך', icon: '🧭', hint: 'כמו GPS במכונית, רק שזה עובד בחלל ומחשב איך להגיע בין כוכבי הלכת' },
+            { id: 7, type: 'coop', name: 'מכשיר קשר', description: 'דיבור בין חברי הצוות', icon: '📡', hint: 'כמו טלפון, רק שזה עובד בחלל ועוזר לכל הצוות לעבוד יחד בזמן אמת' },
+            { id: 8, type: 'coop', name: 'עבודת צוות', description: 'שיתוף פעולה בין כמה אנשים', icon: '👥', hint: 'כמו בספורט - כשכל החברים עובדים יחד, הם יכולים להשיג דברים שאף אחד לא יכול לבד' }
+        ];
+
+        const dilemmaCards = [
+            { id: 1, title: 'החללית נהיית חמה מדי!', description: 'כשהחללית עוברת באטמוספירה של צדק, היא נהיית חמה כמו תנור. איך נגן עליה?', requiredTypes: ['basic', 'tech'], difficulty: 1 },
+            { id: 2, title: 'רוחות חזקות דוחפות אותנו!', description: 'יש רוחות של 500 קמ/ש שדוחפות את החללית הצידה. איך נשמור על כיוון נכון?', requiredTypes: ['basic', 'coop'], difficulty: 2 },
+            { id: 3, title: 'אין מספיק דלק!', description: 'כוח הכבידה של צדק חזק פי 2.5 מכדור הארץ. המנועים שלנו צריכים יותר דלק מהצפוי.', requiredTypes: ['basic', 'tech'], difficulty: 2 },
+            { id: 4, title: 'המחשבים מתקלקלים!', description: 'השדה המגנטי הענק של צדק גורם למחשבים שלנו להשתגע. איך נפתור את זה?', requiredTypes: ['tech', 'coop'], difficulty: 2 },
+            { id: 5, title: 'איך נמצא את הדרך הנכונה?', description: 'צדק מוקף ב-79 ירחים! איך נחשב מסלול שלא יתנגש בהם?', requiredTypes: ['basic', 'tech'], difficulty: 1 },
+            { id: 6, title: 'הצוות פזור במקומות שונים!', description: 'חלק מהצוות בתחנת החלל וחלק בחללית. איך נתאם ביניהם?', requiredTypes: ['coop'], difficulty: 1 },
+            { id: 7, title: 'החללית רועדת מאד!', description: 'הרעידות חזקות כל כך שקשה לשלוט בחללית. מה נעשה?', requiredTypes: ['basic', 'tech'], difficulty: 2 },
+            { id: 8, title: 'הגזים הרעילים של צדק!', description: 'האטמוספירה של צדק מכילה גזים מסוכנים שיכולים לפגוע בחללית.', requiredTypes: ['tech'], difficulty: 1 },
+            { id: 9, title: 'איך נדע שהגענו למהירות נכונה?', description: 'אנחנו צריכים להגיע למהירות של 60 קמ/ש כדי לברוח מכוח הכבידה של צדק.', requiredTypes: ['basic', 'tech'], difficulty: 2 },
+            { id: 10, title: 'אבדנו קשר עם כדור הארץ!', description: 'אנחנו כל כך רחוק מכדור הארץ שאין לנו קשר רדיו. מה נעשה?', requiredTypes: ['coop', 'tech'], difficulty: 2 }
+        ];
+
+        // בניית הלוח
+        function buildBoard() {
+            const board = document.getElementById('gameBoard');
+            board.innerHTML = '';
+
+            for (let row = 0; row < 5; row++) {
+                const rowDiv = document.createElement('div');
+                rowDiv.className = 'board-row';
+
+                for (let col = 0; col < 5; col++) {
+                    const position = row * 5 + (row % 2 === 0 ? col : 4 - col);
+                    if (position >= boardPositions) continue;
+
+                    const square = document.createElement('div');
+                    square.className = 'board-square';
+
+                    // קביעת סוג המשבצת
+                    if (position === 0) {
+                        square.classList.add('square-start');
+                    } else if (position === boardPositions - 1) {
+                        square.classList.add('square-end');
+                    } else if (dilemmaSquares.includes(position)) {
+                        square.classList.add('square-dilemma');
+                    } else {
+                        square.classList.add('square-normal');
+                    }
+
+                    square.innerHTML = `<span>${position}</span>`;
+
+                    // הוספת אייקונים
+                    if (dilemmaSquares.includes(position)) {
+                        square.innerHTML += '<span class="warning-icon">⚠️</span>';
+                    } else if (position === 0) {
+                        square.innerHTML += '<span class="warning-icon">🏁</span>';
+                    } else if (position === boardPositions - 1) {
+                        square.innerHTML += '<span class="warning-icon">🎯</span>';
+                    }
+
+                    // הוספת שחקנים
+                    players.forEach(player => {
+                        if (player.position === position) {
+                            const piece = document.createElement('div');
+                            piece.className = `player-piece ${player.color}`;
+                            square.appendChild(piece);
+                        }
+                    });
+
+                    rowDiv.appendChild(square);
+                }
+                board.appendChild(rowDiv);
+            }
+        }
+
+        // עדכון מידע שחקנים
+        function updatePlayersInfo() {
+            const playersInfo = document.getElementById('playersInfo');
+            playersInfo.innerHTML = '';
+
+            players.forEach((player, index) => {
+                const card = document.createElement('div');
+                card.className = `player-card ${index === currentPlayer ? 'player-active' : ''}`;
+                
+                const colorMap = {
+                    'player-1': '#3b82f6',
+                    'player-2': '#ffffff',
+                    'player-3': '#22c55e',
+                    'player-4': '#a855f7'
+                };
+
+                card.innerHTML = `
+                    <div class="player-color" style="background-color: ${colorMap[player.color]}; ${player.color === 'player-2' ? 'border: 2px solid #4b5563;' : ''}"></div>
+                    <h3 style="font-weight: bold; margin-bottom: 8px;">${player.name}</h3>
+                    <div style="font-size: 0.9rem;">
+                        <div style="margin-bottom: 4px;">📍 מיקום: ${player.position}</div>
+                        <div style="margin-bottom: 4px;">⚡ אנרגיה: ${player.energy}</div>
+                        <div style="margin-bottom: 4px;">🧠 ידע: ${player.knowledge}</div>
+                        <div>🏆 ניקוד: <span style="color: #fde047; font-weight: bold;">${player.score}</span></div>
+                    </div>
+                `;
+                playersInfo.appendChild(card);
+            });
+        }
+
+        // עדכון לוח ניקוד
+        function updateScoreBoard() {
+            const scoreBoard = document.getElementById('scoreBoard');
+            scoreBoard.innerHTML = '';
+
+            const sortedPlayers = [...players].sort((a, b) => b.score - a.score);
+
+            sortedPlayers.forEach((player, index) => {
+                const card = document.createElement('div');
+                card.className = `score-card ${index === 0 ? 'score-leader' : ''}`;
+                
+                const colorMap = {
+                    'player-1': '#3b82f6',
+                    'player-2': '#ffffff',
+                    'player-3': '#22c55e',
+                    'player-4': '#a855f7'
+                };
+
+                card.innerHTML = `
+                    <div class="player-color" style="background-color: ${colorMap[player.color]}; ${player.color === 'player-2' ? 'border: 2px solid #4b5563;' : ''} margin: 0 auto 8px auto;"></div>
+                    <div style="font-weight: bold; font-size: 0.9rem; margin-bottom: 4px;">${player.name}</div>
+                    <div style="font-size: 1.5rem; font-weight: bold; color: #fde047; margin-bottom: 4px;">${player.score}</div>
+                    ${index === 0 ? '<div style="font-size: 0.8rem; color: #fde047;">👑 מוביל</div>' : ''}
+                    <div style="font-size: 0.8rem; color: #d1d5db;">מיקום: ${player.position}</div>
+                `;
+                scoreBoard.appendChild(card);
+            });
+        }
+
+        // עדכון פקדים
+        function updateControls() {
+            const controls = document.getElementById('gameControls');
+            
+            controls.innerHTML = `
+                <div class="current-player">
+                    תור של: <span style="color: #fde047; font-weight: bold;">${players[currentPlayer].name}</span>
+                </div>
+                ${bonusTurn ? '<p style="color: #86efac; font-weight: bold; margin-bottom: 10px;">🎉 תור בונוס! הצלחת לפתור את הדילמה!</p>' : ''}
+                <p style="color: #d1d5db; margin-bottom: 16px; font-size: 0.9rem;">
+                    ${bonusTurn ? 'התור הבונוס שלך - הטילי שוב קובייה!' : 'לחץ על הכפתור כדי להטיל קובייה ולזוז על הלוח'}
+                </p>
+                <button onclick="handlePlayerTurn()" class="game-button ${bonusTurn ? 'bonus-button' : ''}" ${currentDilemma ? 'disabled' : ''}>
+                    ${bonusTurn ? '🎲🎉 הטל קובייה - תור בונוס!' : '🎲 הטל קובייה וזוז'}
+                </button>
+                <p style="color: #9ca3af; margin-top: 8px; font-size: 0.8rem;">ערך קובייה אחרון: ${diceValue}</p>
+            `;
+        }
+
+        // הטלת קובייה ותנועה
+        function handlePlayerTurn() {
+            if (currentDilemma) return;
+
+            diceValue = Math.floor(Math.random() * 6) + 1;
+            addLog(`${players[currentPlayer].name} הטיל קובייה וקיבל: ${diceValue}`);
+            
+            movePlayer(diceValue);
+
+            if (bonusTurn) {
+                bonusTurn = false;
+                setTimeout(() => {
+                    currentPlayer = (currentPlayer + 1) % players.length;
+                    updateUI();
+                }, 1000);
+            } else {
+                setTimeout(() => {
+                    if (!currentDilemma) {
+                        currentPlayer = (currentPlayer + 1) % players.length;
+                        updateUI();
+                    }
+                }, 1000);
+            }
+        }
+
+        // תנועת שחקן
+        function movePlayer(steps) {
+            const player = players[currentPlayer];
+            const newPosition = Math.min(player.position + steps, boardPositions - 1);
+            player.position = newPosition;
+
+            // בדיקת דילמה
+            if (dilemmaSquares.includes(newPosition)) {
+                const randomDilemma = dilemmaCards[Math.floor(Math.random() * dilemmaCards.length)];
+                currentDilemma = randomDilemma;
+                showDilemma();
+                addLog(`${player.name} נתקל בדילמה: ${randomDilemma.title}`);
+            }
+
+            // בדיקת ניצחון
+            if (newPosition >= boardPositions - 1) {
+                addLog(`🎉 ${player.name} הצליח לברוח מכוכב צדק ונצח במשחק!`);
+                player.score += 100;
+            }
+
+            updateUI();
+        }
+
+        // הצגת דילמה
+        function showDilemma() {
+            const modal = document.getElementById('dilemmaModal');
+            const content = document.getElementById('dilemmaContent');
+            
+            selectedCard = null;
+            showHint = false;
+            explanation = '';
+            answerFeedback = null;
+
+            content.innerHTML = `
+                <h4 style="font-size: 1.1rem; font-weight: bold; margin-bottom: 8px;">${currentDilemma.title}</h4>
+                <p style="margin-bottom: 16px; color: #e5e7eb;">${currentDilemma.description}</p>
+                <p style="font-size: 0.9rem; color: #d1d5db; margin-bottom: 16px;">
+                    דרושים קלפים מסוג: <strong>${currentDilemma.requiredTypes.join(', ')}</strong> | 
+                    קושי: ${'⭐'.repeat(currentDilemma.difficulty)}
+                </p>
+                
+                <div id="feedbackArea"></div>
+                
+                <div id="cardSelection">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                        <label style="font-weight: bold;">בחר קלף לפתרון:</label>
+                        <button onclick="toggleHint()" style="background: #ea580c; color: white; border: none; padding: 6px 12px; border-radius: 4px; font-size: 0.9rem; cursor: pointer;">
+                            💡 ${showHint ? 'הסתר רמז' : 'רמז (-1 נקודה)'}
+                        </button>
+                    </div>
+                    
+                    <div class="cards-grid" id="cardsGrid">
+                        ${knowledgeCards.map(card => `
+                            <div>
+                                <button onclick="selectCard(${card.id})" class="card-button" id="card-${card.id}">
+                                    <div style="font-weight: bold; margin-bottom: 4px;">${card.icon} ${card.name}</div>
+                                    <div style="font-size: 0.8rem; color: #d1d5db;">${card.type}</div>
+                                    <div style="font-size: 0.8rem; color: #9ca3af; margin-top: 4px;">${card.description}</div>
+                                </button>
+                                <div id="hint-${card.id}" style="display: none;"></div>
+                            </div>
+                        `).join('')}
+                    </div>
+                    
+                    <div style="margin: 16px 0;">
+                        <label style="font-weight: bold; display: block; margin-bottom: 8px;">הסבר את הפתרון שלך (לפחות 30 תווים):</label>
+                        <textarea id="explanationText" placeholder="למשל: אני בוחר קלף 'חליפות הגנה' כי הן מגנות על החללית מפני החום הקיצוני..." onInput="updateExplanation()"></textarea>
+                        <div style="font-size: 0.8rem; color: #9ca3af; margin-top: 4px;" id="charCount">0/30 תווים מינימום</div>
+                    </div>
+                    
+                    <button onclick="solveDilemma()" id="solveButton" class="game-button" style="background: #16a34a;" disabled>
+                        ✅ פתור את הדילמה
+                    </button>
+                </div>
+            `;
+
+            modal.style.display = 'flex';
+        }
+
+        // בחירת קלף
+        function selectCard(cardId) {
+            selectedCard = cardId;
+            
+            // עדכון ויזואלי
+            knowledgeCards.forEach(card => {
+                const cardElement = document.getElementById(`card-${card.id}`);
+                if (card.id === cardId) {
+                    cardElement.classList.add('card-selected');
+                } else {
+                    cardElement.classList.remove('card-selected');
+                }
+            });
+
+            // הצגת רמז אם נדרש
+            updateHintDisplay();
+            updateSolveButton();
+        }
+
+        // החלפת רמז
+        function toggleHint() {
+            showHint = !showHint;
+            updateHintDisplay();
+            
+            // עדכון כפתור הרמז
+            const hintButton = document.querySelector('[onclick="toggleHint()"]');
+            hintButton.textContent = `💡 ${showHint ? 'הסתר רמז' : 'רמז (-1 נקודה)'}`;
+        }
+
+        // עדכון הצגת רמז
+        function updateHintDisplay() {
+            knowledgeCards.forEach(card => {
+                const hintElement = document.getElementById(`hint-${card.id}`);
+                if (showHint && selectedCard === card.id) {
+                    hintElement.style.display = 'block';
+                    hintElement.innerHTML = `<div class="hint-box"><strong>💡 רמז:</strong> ${card.hint}</div>`;
+                } else {
+                    hintElement.style.display = 'none';
+                }
+            });
+        }
+
+        // עדכון הסבר
+        function updateExplanation() {
+            explanation = document.getElementById('explanationText').value;
+            document.getElementById('charCount').textContent = `${explanation.length}/30 תווים מינימום`;
+            updateSolveButton();
+        }
+
+        // עדכון כפתור פתרון
+        function updateSolveButton() {
+            const button = document.getElementById('solveButton');
+            button.disabled = !selectedCard || explanation.length < 30;
+        }
+
+        // פתרון דילמה
+        function solveDilemma() {
+            if (!selectedCard || explanation.length < 30) {
+                alert('נא לבחור קלף ולכתוב הסבר!');
+                return;
+            }
+
+            const feedback = evaluateAnswer();
+            showFeedback(feedback);
+
+            let bonusSteps = 0;
+            let points = 0;
+            let hintPenalty = showHint ? 1 : 0;
+
+            if (feedback.status === 'correct') {
+                bonusSteps = 3;
+                points = (currentDilemma.difficulty * 10) - hintPenalty;
+            } else if (feedback.status === 'partial') {
+                bonusSteps = 1;
+                points = 5 - hintPenalty;
+            } else {
+                points = 0;
+                bonusSteps = 0;
+            }
+
+            addLog(feedback.message);
+            if (bonusSteps > 0) {
+                addLog(`${players[currentPlayer].name} זוכה ב-${bonusSteps} צעדי בונוס ו-${points} נקודות!`);
+            }
+
+            // עדכון נקודות השחקן
+            players[currentPlayer].score += points;
+            players[currentPlayer].knowledge = Math.max(0, players[currentPlayer].knowledge - 1);
+
+            // התקדמות נוספת
+            if (bonusSteps > 0) {
+                setTimeout(() => {
+                    movePlayer(bonusSteps);
+                    bonusTurn = true;
+                    addLog(`${players[currentPlayer].name} מקבל תור בונוס! הטילי שוב קובייה!`);
+                    closeDilemma();
+                }, 2000);
+            } else {
+                setTimeout(() => {
+                    currentPlayer = (currentPlayer + 1) % players.length;
+                    closeDilemma();
+                }, 2000);
+            }
+        }
+
+        // הערכת התשובה
+        function evaluateAnswer() {
+            const card = knowledgeCards.find(c => c.id === selectedCard);
+            const explanationWords = explanation.trim().toLowerCase().split(' ');
+
+            const relevantKeywords = {
+                'החללית נהיית חמה מדי!': ['חום', 'הגנה', 'מגן', 'חליפה', 'בידוד'],
+                'רוחות חזקות דוחפות אותנו!': ['כיוון', 'ניווט', 'שליטה', 'כוח', 'צוות'],
+                'אין מספיק דלק!': ['כוח', 'מנוע', 'דלק', 'חזק', 'תאוצה'],
+                'המחשבים מתקלקלים!': ['מגן', 'הגנה', 'תיקון', 'צוות', 'גיבוי'],
+                'איך נמצא את הדרך הנכונה?': ['ניווט', 'מחשב', 'חישוב', 'מסלול'],
+                'הצוות פזור במקומות שונים!': ['קשר', 'תקשורת', 'רדיו', 'צוות', 'תיאום'],
+                'החללית רועדת מאד!': ['שליטה', 'יציבות', 'כוח', 'איזון'],
+                'הגזים הרעילים של צדק!': ['הגנה', 'מגן', 'חליפה', 'בטיחות'],
+                'איך נדע שהגענו למהירות נכונה?': ['מהירות', 'מדידה', 'מחשב', 'חישוב'],
+                'אבדנו קשר עם כדור הארץ!': ['קשר', 'תקשורת', 'רדיו', 'אנטנה']
+            };
+
+            const keywords = relevantKeywords[currentDilemma.title] || [];
+            const hasRelevantWords = keywords.some(keyword => 
+                explanationWords.some(word => word.includes(keyword))
+            );
+
+            const isCorrectType = currentDilemma.requiredTypes.includes(card.type);
+            const isLongEnough = explanation.length >= 30;
+
+            if (isCorrectType && hasRelevantWords && isLongEnough) {
+                return { status: 'correct', message: '✅ תשובה מצוינת! הסברת נכון איך הקלף פותר את הבעיה.' };
+            } else if (isCorrectType && isLongEnough) {
+                return { status: 'partial', message: '⚡ תשובה טובה! הקלף מתאים אבל ההסבר יכול להיות יותר ספציפי לבעיה.' };
+            } else if (isCorrectType) {
+                return { status: 'partial', message: '⚡ כיוון נכון! נסה להרחיב את ההסבר - איך בדיוק הקלף עוזר?' };
+            } else {
+                return { status: 'wrong', message: '❌ הקלף לא ממש מתאים לבעיה הזו. נסה לחשוב על קלף אחר או קח רמז!' };
+            }
+        }
+
+        // הצגת משוב
+        function showFeedback(feedback) {
+            const feedbackArea = document.getElementById('feedbackArea');
+            const cardSelection = document.getElementById('cardSelection');
+            
+            let feedbackClass = 'feedback-wrong';
+            if (feedback.status === 'correct') feedbackClass = 'feedback-correct';
+            else if (feedback.status === 'partial') feedbackClass = 'feedback-partial';
+            
+            feedbackArea.innerHTML = `<div class="feedback-box ${feedbackClass}">${feedback.message}</div>`;
+            cardSelection.style.display = 'none';
+        }
+
+        // סגירת דילמה
+        function closeDilemma() {
+            setTimeout(() => {
+                document.getElementById('dilemmaModal').style.display = 'none';
+                currentDilemma = null;
+                updateUI();
+            }, 1000);
+        }
+
+        // הוספה ליומן
+        function addLog(message) {
+            gameLog.push(message);
+            if (gameLog.length > 5) gameLog.shift();
+            
+            const logElement = document.getElementById('gameLog');
+            logElement.innerHTML = gameLog.map(entry => 
+                `<div class="log-entry">${entry}</div>`
+            ).join('');
+        }
+
+        // איפוס משחק
+        function resetGame() {
+            players = [
+                { id: 1, name: 'מהנדס 1', position: 0, energy: 10, parts: 5, knowledge: 3, score: 0, color: 'player-1' },
+                { id: 2, name: 'מהנדסת 2', position: 0, energy: 10, parts: 5, knowledge: 3, score: 0, color: 'player-2' },
+                { id: 3, name: 'מהנדס 3', position: 0, energy: 10, parts: 5, knowledge: 3, score: 0, color: 'player-3' },
+                { id: 4, name: 'מהנדסת 4', position: 0, energy: 10, parts: 5, knowledge: 3, score: 0, color: 'player-4' }
+            ];
+            currentPlayer = 0;
+            bonusTurn = false;
+            gameLog = [];
+            currentDilemma = null;
+            document.getElementById('dilemmaModal').style.display = 'none';
+            
+            addLog('משחק חדש התחיל!');
+            updateUI();
+        }
+
+        // עדכון ממשק משתמש
+        function updateUI() {
+            buildBoard();
+            updatePlayersInfo();
+            updateScoreBoard();
+            updateControls();
+        }
+
+        // אתחול המשחק
+        updateUI();
+        addLog('המשחק התחיל! בהצלחה!');
+    </script>
+</body>
+</html>
