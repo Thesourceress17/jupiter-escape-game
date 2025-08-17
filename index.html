@@ -24,6 +24,20 @@
             margin: 0 auto;
         }
         
+        .intro-screen {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+            background: #1f2937;
+            padding: 40px;
+            border-radius: 16px;
+            border: 2px solid #facc15;
+        }
+        
+        .game-screen {
+            display: none;
+        }
+        
         .header {
             text-align: center;
             margin-bottom: 30px;
@@ -41,11 +55,74 @@
             color: #d1d5db;
         }
         
+        .rules-section {
+            text-align: right;
+            background: #374151;
+            padding: 30px;
+            border-radius: 12px;
+            margin: 30px 0;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .start-button {
+            background: #16a34a;
+            color: white;
+            border: none;
+            padding: 16px 32px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            border-radius: 12px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        
+        .start-button:hover {
+            background: #15803d;
+        }
+        
+        .dice-container {
+            text-align: center;
+            background: #1f2937;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            border: 2px solid #4b5563;
+        }
+        
+        .dice {
+            display: inline-block;
+            width: 60px;
+            height: 60px;
+            background: white;
+            color: #1f2937;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            margin: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+        
+        .dice.rolling {
+            animation: rollDice 0.5s ease-in-out;
+        }
+        
+        @keyframes rollDice {
+            0% { transform: rotate(0deg) scale(1); }
+            25% { transform: rotate(90deg) scale(1.1); }
+            50% { transform: rotate(180deg) scale(1.2); }
+            75% { transform: rotate(270deg) scale(1.1); }
+            100% { transform: rotate(360deg) scale(1); }
+        }
+        
         .board-container {
             background: #1f2937;
             padding: 20px;
             border-radius: 12px;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
         }
         
         .board-title {
@@ -105,11 +182,27 @@
             font-size: 9px;
         }
         
+        .game-log {
+            background: #1f2937;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 2px solid #facc15;
+        }
+        
+        .log-entry {
+            background: #374151;
+            padding: 8px;
+            border-radius: 4px;
+            margin-bottom: 4px;
+            font-size: 0.9rem;
+        }
+        
         .players-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 16px;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
         }
         
         .player-card {
@@ -134,30 +227,31 @@
         .scoreboard {
             background: linear-gradient(to right, #92400e, #c2410c);
             border: 2px solid #facc15;
-            padding: 20px;
+            padding: 15px;
             border-radius: 12px;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
         }
         
         .scoreboard-title {
             text-align: center;
-            font-size: 1.5rem;
+            font-size: 1.2rem;
             font-weight: bold;
             color: #fde047;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
         
         .score-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 16px;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 12px;
         }
         
         .score-card {
             background: rgba(55, 65, 81, 0.5);
-            padding: 12px;
-            border-radius: 8px;
+            padding: 8px;
+            border-radius: 6px;
             text-align: center;
+            font-size: 0.85rem;
         }
         
         .score-leader {
@@ -167,7 +261,7 @@
         
         .controls {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
         }
         
         .current-player {
@@ -287,26 +381,12 @@
             border: 1px solid #ef4444;
         }
         
-        .game-log {
-            background: #1f2937;
-            padding: 16px;
+        .correct-answer {
+            background: rgba(59, 130, 246, 0.3);
+            border: 1px solid #3b82f6;
+            padding: 12px;
             border-radius: 8px;
-            margin-bottom: 20px;
-        }
-        
-        .log-entry {
-            background: #374151;
-            padding: 8px;
-            border-radius: 4px;
-            margin-bottom: 4px;
-            font-size: 0.9rem;
-        }
-        
-        .rules {
-            background: #1f2937;
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 20px;
+            margin-top: 12px;
         }
         
         textarea {
@@ -345,72 +425,114 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- כותרת -->
-        <div class="header">
-            <h1 class="title">🚀 בריחה מכוכב צדק</h1>
-            <p class="subtitle">משחק אסטרטגיה הנדסי לתלמידים ותלמידות כיתה ח'</p>
-            <p style="font-size: 0.9rem; color: #9ca3af; margin-top: 8px;">יוצר על ידי Thesourceress17 💫</p>
-        </div>
-
-        <!-- לוח המשחק -->
-        <div class="board-container">
-            <h3 class="board-title">🛤️ מסלול הבריחה מכוכב צדק (35 משבצות)</h3>
-            <div class="board" id="gameBoard">
-                <!-- הלוח ייבנה ב-JavaScript -->
-            </div>
-            <div class="legend">
-                🏁 התחלה | ⚠️ דילמה הנדסית | 🎯 שיגור מוצלח!
-            </div>
-        </div>
-
-        <!-- מידע שחקנים -->
-        <div class="players-grid" id="playersInfo">
-            <!-- מידע השחקנים ייבנה ב-JavaScript -->
-        </div>
-
-        <!-- לוח ניקוד -->
-        <div class="scoreboard">
-            <h3 class="scoreboard-title">🏆 לוח הניקוד 🏆</h3>
-            <div class="score-grid" id="scoreBoard">
-                <!-- לוח הניקוד ייבנה ב-JavaScript -->
-            </div>
-        </div>
-
-        <!-- פקדים -->
-        <div class="controls" id="gameControls">
-            <!-- הפקדים ייבנו ב-JavaScript -->
-        </div>
-
-        <!-- יומן המשחק -->
-        <div class="game-log">
-            <h3 style="margin-bottom: 12px;">📖 יומן המשחק</h3>
-            <div id="gameLog">
-                <div class="log-entry">המשחק התחיל! בהצלחה!</div>
-            </div>
-        </div>
-
-        <!-- כללי המשחק -->
-        <div class="rules">
-            <h3 style="margin-bottom: 16px;">📋 כללי המשחק</h3>
+    <!-- מסך הוראות -->
+    <div id="introScreen" class="intro-screen">
+        <h1 class="title">🚀 בריחה מכוכב צדק</h1>
+        <p class="subtitle">משחק אסטרטגיה הנדסי לתלמידים ותלמידות כיתה ח'</p>
+        <p style="font-size: 0.9rem; color: #9ca3af; margin-top: 8px;">יוצר על ידי Thesourceress17 💫</p>
+        
+        <div class="rules-section">
+            <h3 style="margin-bottom: 16px; color: #fde047;">📋 הוראות המשחק</h3>
             <div style="font-size: 0.9rem; line-height: 1.6;">
-                <p style="margin-bottom: 8px;"><strong>מטרה:</strong> להיות הראשון להגיע למשבצת 34 - שיגור מוצלח מכוכב צדק!</p>
-                <p style="margin-bottom: 8px;"><strong>איך משחקים:</strong> 1️⃣ לוחצים "הטל קובייה וזוז" ← 2️⃣ השחקן זז אוטומטית ← 3️⃣ אם נחתת על משבצת אדומה, פותרים דילמה</p>
-                <p style="margin-bottom: 8px;"><strong>קובייה חכמה:</strong> המשחק מכוון אותך לדילמות כדי ללמוד יותר פיזיקה!</p>
-                <p style="margin-bottom: 8px;"><strong>תור בונוס:</strong> אם פתרת דילמה נכון - מקבלת תור נוסף! הכפתור יהפוך לירוק ותוכלי להטיל שוב!</p>
-                <p style="margin-bottom: 8px;"><strong>דילמות:</strong> משבצות אדומות עם ⚠️ (יש 13 כאלה!) דורשות פתרון בעיות הנדסיות מדעיות</p>
-                <p style="margin-bottom: 8px;"><strong>רמזים:</strong> לוחצים על כפתור הרמז לעזרה (מורידים 1 נקודה)</p>
-                <p><strong>ניקוד:</strong> תשובה מצוינת = תור בונוס + 3 צעדי קדימה + נקודות</p>
+                <p style="margin-bottom: 12px;"><strong>🎯 מטרה:</strong> להיות הראשון להגיע למשבצת 34 ולברוח בהצלחה מכוכב צדק!</p>
+                
+                <p style="margin-bottom: 12px;"><strong>🎲 איך משחקים:</strong></p>
+                <p style="margin-bottom: 8px;">1️⃣ השחקן הפעיל לוחץ על "הטל קובייה וזוז"</p>
+                <p style="margin-bottom: 8px;">2️⃣ הקובייה מתגלגלת והשחקן זז אוטומטית</p>
+                <p style="margin-bottom: 8px;">3️⃣ משבצות אפורות = רק מתקדמים</p>
+                <p style="margin-bottom: 12px;">4️⃣ משבצות אדומות עם ⚠️ = פותרים דילמה הנדסית!</p>
+                
+                <p style="margin-bottom: 12px;"><strong>🔬 פתרון דילמות:</strong></p>
+                <p style="margin-bottom: 8px;">• קוראים את הבעיה ההנדסית בקפידה</p>
+                <p style="margin-bottom: 8px;">• בוחרים קלף שמתאים לפתרון מהרשימה</p>
+                <p style="margin-bottom: 8px;">• כותבים הסבר של לפחות 30 תווים איך הקלף פותר את הבעיה</p>
+                <p style="margin-bottom: 8px;">• אם תקועים - לוחצים על כפתור הרמז (מורידים נקודה)</p>
+                <p style="margin-bottom: 12px;">• לוחצים "פתור את הדילמה"</p>
+                
+                <p style="margin-bottom: 12px;"><strong>🏆 ניקוד והתקדמות:</strong></p>
+                <p style="margin-bottom: 8px;">✅ <strong>תשובה מצוינת</strong> = 3 צעדי בונוס + תור נוסף + נקודות גבוהות</p>
+                <p style="margin-bottom: 8px;">⚡ <strong>תשובה טובה</strong> = 1 צעד בונוס + תור נוסף + נקודות</p>
+                <p style="margin-bottom: 12px;">❌ <strong>תשובה שגויה</strong> = אין בונוס, עוברים לשחקן הבא</p>
+                
+                <p style="margin-bottom: 12px;"><strong>💡 עצות לניצחון:</strong></p>
+                <p style="margin-bottom: 8px;">• חשבו מדעית! הדילמות דורשות פתרונות הנדסיים אמיתיים</p>
+                <p style="margin-bottom: 8px;">• קראו בקפידה את התיאור של כל קלף</p>
+                <p style="margin-bottom: 8px;">• כתבו הסברים מפורטים עם מונחים מדעיים</p>
+                <p style="margin-bottom: 8px;">• השתמשו במידע על כוכב צדק שלמדתם בכיתה</p>
+                <p>• הקובייה "חכמה" - תכוון אתכם לדילמות כדי ללמוד יותר!</p>
             </div>
         </div>
+        
+        <button class="start-button" onclick="startGame()">
+            🚀 התחל משחק - ברחו מכוכב צדק!
+        </button>
+    </div>
 
-        <!-- כפתור איפוס -->
-        <div style="text-align: center; border-top: 1px solid #4b5563; padding-top: 20px;">
-            <h4 style="margin-bottom: 8px;">🔄 התחלה מחדש</h4>
-            <p style="font-size: 0.9rem; color: #9ca3af; margin-bottom: 16px;">רק אם אתם רוצים להתחיל משחק חדש לחלוטין</p>
-            <button onclick="resetGame()" style="background: #dc2626; color: white; border: none; padding: 8px 16px; border-radius: 8px; font-weight: bold; cursor: pointer;">
-                🔄 איפוס מלא - משחק חדש
-            </button>
+    <!-- מסך המשחק -->
+    <div id="gameScreen" class="game-screen">
+        <div class="container">
+            <!-- כותרת -->
+            <div class="header">
+                <h1 class="title">🚀 בריחה מכוכב צדק</h1>
+                <p class="subtitle">משחק אסטרטגיה הנדסי - בעיצומו!</p>
+            </div>
+
+            <!-- קובייה -->
+            <div class="dice-container" id="diceContainer">
+                <div class="current-player">
+                    תור של: <span style="color: #fde047; font-weight: bold;" id="currentPlayerName">מהנדס 1</span>
+                </div>
+                <div id="bonusMessage" style="display: none; color: #86efac; font-weight: bold; margin-bottom: 10px;">
+                    🎉 תור בונוס! הצלחת לפתור את הדילמה!
+                </div>
+                <div class="dice" id="diceDisplay">1</div>
+                <br>
+                <button onclick="handlePlayerTurn()" class="game-button" id="rollButton">
+                    🎲 הטל קובייה וזוז
+                </button>
+            </div>
+
+            <!-- יומן המשחק -->
+            <div class="game-log">
+                <h3 style="margin-bottom: 12px;">📖 יומן המשחק</h3>
+                <div id="gameLog">
+                    <div class="log-entry">המשחק התחיל! בהצלחה!</div>
+                </div>
+            </div>
+
+            <!-- לוח המשחק -->
+            <div class="board-container">
+                <h3 class="board-title">🛤️ מסלול הבריחה מכוכב צדק (35 משבצות)</h3>
+                <div class="board" id="gameBoard">
+                    <!-- הלוח ייבנה ב-JavaScript -->
+                </div>
+                <div class="legend">
+                    🏁 התחלה | ⚠️ דילמה הנדסית | 🎯 שיגור מוצלח!
+                </div>
+            </div>
+
+            <!-- מידע שחקנים -->
+            <div class="players-grid" id="playersInfo">
+                <!-- מידע השחקנים ייבנה ב-JavaScript -->
+            </div>
+
+            <!-- לוח ניקוד קטן -->
+            <div class="scoreboard">
+                <h3 class="scoreboard-title">🏆 ניקוד</h3>
+                <div class="score-grid" id="scoreBoard">
+                    <!-- לוח הניקוד ייבנה ב-JavaScript -->
+                </div>
+            </div>
+
+            <!-- כפתור איפוס -->
+            <div style="text-align: center; border-top: 1px solid #4b5563; padding-top: 20px;">
+                <button onclick="resetGame()" style="background: #dc2626; color: white; border: none; padding: 8px 16px; border-radius: 8px; font-weight: bold; cursor: pointer;">
+                    🔄 משחק חדש
+                </button>
+                <button onclick="showRules()" style="background: #6366f1; color: white; border: none; padding: 8px 16px; border-radius: 8px; font-weight: bold; cursor: pointer; margin-right: 10px;">
+                    📋 הצג הוראות
+                </button>
+            </div>
         </div>
     </div>
 
@@ -425,7 +547,7 @@
     </div>
 
     <script>
-        // נתוני המשחק - לוח גדול יותר
+        // נתוני המשחק
         let players = [
             { id: 1, name: 'מהנדס 1', position: 0, energy: 10, parts: 5, knowledge: 3, score: 0, color: 'player-1', turnsSinceDilemma: 0 },
             { id: 2, name: 'מהנדסת 2', position: 0, energy: 10, parts: 5, knowledge: 3, score: 0, color: 'player-2', turnsSinceDilemma: 0 },
@@ -442,11 +564,12 @@
         let showHint = false;
         let answerFeedback = null;
         let explanation = '';
+        let usedDilemmas = []; // למעקב אחרי דילמות שכבר שאלנו
 
-        const boardPositions = 35; // הלוח הגדול יותר
+        const boardPositions = 35;
         const dilemmaSquares = [3, 6, 9, 12, 15, 18, 21, 24, 27, 30, 33, 16, 25]; // 13 דילמות
 
-        // קלפי ידע מדעיים יותר
+        // קלפי ידע
         const knowledgeCards = [
             { id: 1, type: 'physics', name: 'חוקי ניוטון', description: 'כוח, תאוצה ותנועה', icon: '🔬', hint: 'חוק שלישי: לכל פעולה יש תגובה. ברקטות הגזים דוחפים החללית קדימה!' },
             { id: 2, type: 'physics', name: 'כוח כבידה', description: 'מהירות בריחה ומסלולים', icon: '🌍', hint: 'כדי לברוח מכוכב לכת צריך להגיע למהירות בריחה - בצדק זה 60 קמ/ש!' },
@@ -460,122 +583,146 @@
             { id: 10, type: 'physics', name: 'אווירודינמיקה', description: 'התנגדות אוויר וזרימה', icon: '✈️', hint: 'צורה חלקה וייעול הזרימה מפחיתים התנגדות ומאפשרים תנועה מהירה יותר' }
         ];
 
-        // דילמות מדעיות יותר
+        // דילמות עם תשובות נכונות - כל דילמה קשורה למשבצת ספציפית
         const dilemmaCards = [
             { 
-                id: 1, 
+                id: 1, position: 3,
                 title: 'חום קיצוני פוגע בחללית!', 
                 description: 'החללית מתחממת ל-800 מעלות צלזיוס כשחודרת לאטמוספירה של צדק. הרכיבים מתחילים להימס!', 
                 requiredTypes: ['physics', 'engineering'], 
                 difficulty: 2,
-                keywords: ['חום', 'הגנה', 'מגן', 'תרמי', 'קירור', 'טמפרטורה']
+                keywords: ['חום', 'הגנה', 'מגן', 'תרמי', 'קירור', 'טמפרטורה'],
+                correctAnswer: 'הפתרון הנכון: להתקין מגנים תרמיים - לוחות מיוחדים המחזירים חום ומגנים על מבנה החללית. בנוסף, מערכות קירור פעילות יכולות להוריד את הטמפרטורה באמצעות נוזל קירור.'
             },
             { 
-                id: 2, 
+                id: 2, position: 6,
                 title: 'רוחות של 500 קמ/ש מסיטות אותנו!', 
                 description: 'סופות ענק בצדק יוצרות רוחות חזקות שדוחפות את החללית למסלול מסוכן לעבר הירחים שלו.', 
                 requiredTypes: ['physics', 'engineering'], 
                 difficulty: 2,
-                keywords: ['רוח', 'ניווט', 'כיוון', 'מסלול', 'שליטה', 'דינמיקה']
+                keywords: ['רוח', 'ניווט', 'כיוון', 'מסלול', 'שליטה', 'דינמיקה'],
+                correctAnswer: 'הפתרון הנכון: שימוש במערכות ניווט מתקדמות לחישוב מסלול חדש בזמן אמת, יחד עם עקרונות אווירודינמיקה ליצירת צורה חלקה שמפחיתה התנגדות לרוח.'
             },
             { 
-                id: 3, 
+                id: 3, position: 9,
                 title: 'כוח הכבידה חזק מדי למנועים!', 
                 description: 'כוח הכבידה של צדק פי 2.5 מכדור הארץ. המנועים שלנו לא מספיק חזקים להגיע למהירות בריחה!', 
                 requiredTypes: ['physics', 'engineering'], 
                 difficulty: 3,
-                keywords: ['כבידה', 'מנוע', 'דחף', 'מהירות', 'כוח', 'ניוטון']
+                keywords: ['כבידה', 'מנוע', 'דחף', 'מהירות', 'כוח', 'ניוטון'],
+                correctAnswer: 'הפתרון הנכון: שימוש במנועי רקטה בעלי דחף גבוה יותר, תוך הפעלת חוק ניוטון השלישי - הגזים נדחפים החוצה במהירות גבוהה, ולכן החללית נדחפת בכיוון ההפוך בכוח רב.'
             },
             { 
-                id: 4, 
+                id: 4, position: 12,
                 title: 'קרינה מגנטית פוגעת במחשבים!', 
                 description: 'השדה המגנטי הענק של צדק גורם למערכות האלקטרוניקה להשתגע ולמחשבים לקרוס.', 
                 requiredTypes: ['engineering', 'teamwork'], 
                 difficulty: 2,
-                keywords: ['מגנטי', 'הגנה', 'אלקטרוניקה', 'מגן', 'קרינה']
+                keywords: ['מגנטי', 'הגנה', 'אלקטרוניקה', 'מגן', 'קרינה'],
+                correctAnswer: 'הפתרון הנכון: התקנת מגנים מגנטיים מיוחדים סביב המחשבים, יחד עם פרוטוקולי חירום לגיבוי המערכות החיוניות ותיאום הצוות בזמן התקלה.'
             },
             { 
-                id: 5, 
+                id: 5, position: 15,
                 title: 'איך לחשב מסלול בין 79 ירחים?', 
                 description: 'צדק מוקף ב-79 ירחים שמשפיעים על המסלול שלנו. איך נחשב נתיב בטוח שלא יתנגש בהם?', 
                 requiredTypes: ['physics', 'engineering'], 
                 difficulty: 2,
-                keywords: ['מסלול', 'ניווט', 'חישוב', 'כבידה', 'GPS']
+                keywords: ['מסלול', 'ניווט', 'חישוב', 'כבידה', 'GPS'],
+                correctAnswer: 'הפתרון הנכון: שימוש במערכות ניווט מתקדמות המחשבות את השפעת כוח הכבידה של כל הירחים בזמן אמת, יחד עם הבנת חוקי הכבידה לתכנון מסלול אופטימלי.'
             },
             { 
-                id: 6, 
+                id: 6, position: 18,
                 title: 'תיקונים דחופים מחוץ לחללית!', 
                 description: 'יש תיקונים שצריך לבצע על גוף החללית. האסטרונאוט צריך לצאת החוצה - האם החליפה תגן בקרינה ובטמפרטורות קיצוניות של צדק?', 
                 requiredTypes: ['engineering', 'teamwork'], 
                 difficulty: 2,
-                keywords: ['חליפה', 'הגנה', 'קרינה', 'טמפרטורה', 'בטיחות']
+                keywords: ['חליפה', 'הגנה', 'קרינה', 'טמפרטורה', 'בטיחות'],
+                correctAnswer: 'הפתרון הנכון: שימוש בחליפות אסטרונאוט מיוחדות עם הגנה תרמית וקרינתית מתקדמת, יחד עם פרוטוקולי חירום קפדניים ותיאום צוות הבטיחות.'
             },
             { 
-                id: 7, 
+                id: 7, position: 21,
                 title: 'רעידות חזקות פוגעות ביציבות!', 
                 description: 'הרעידות והזעזועים מהאטמוספירה הסוערת גורמים לחללית לרעוד בצורה מסוכנת. איך נשמור על יציבות?', 
                 requiredTypes: ['physics', 'engineering'], 
                 difficulty: 2,
-                keywords: ['רעידה', 'יציבות', 'שליטה', 'אווירודינמיקה', 'זרימה']
+                keywords: ['רעידה', 'יציבות', 'שליטה', 'אווירודינמיקה', 'זרימה'],
+                correctAnswer: 'הפתרון הנכון: שימוש בעקרונות אווירודינמיקה ליצירת עיצוב יציב יותר, יחד עם מערכות בקרה אוטומטיות המתבססות על חוקי התנועה של ניוטון.'
             },
             { 
-                id: 8, 
+                id: 8, position: 24,
                 title: 'גזים רעילים חודרים לחללית!', 
                 description: 'גזי המתאן והאמוניה של צדק רעילים ומסוכנים. הם חודרים דרך נקבים קטנים במערכת אוורור!', 
                 requiredTypes: ['engineering'], 
                 difficulty: 1,
-                keywords: ['גזים', 'הגנה', 'אטימה', 'סינון', 'בטיחות']
+                keywords: ['גזים', 'הגנה', 'אטימה', 'סינון', 'בטיחות'],
+                correctAnswer: 'הפתרון הנכון: התקנת מערכות סינון מתקדמות ומגנים כימיים המונעים חדירת גזים רעילים, יחד עם אטימה מושלמת של כל הסדקים.'
             },
             { 
-                id: 9, 
+                id: 9, position: 27,
                 title: 'איך למדוד מהירות בריחה?', 
                 description: 'אנחנו צריכים להגיע למהירות של 60 קמ/ש כדי לברוח מכוח הכבידה של צדק. איך נדע בדיוק שהגענו למהירות הנכונה?', 
                 requiredTypes: ['physics', 'engineering'], 
                 difficulty: 2,
-                keywords: ['מהירות', 'מדידה', 'ניווט', 'חישוב', 'כבידה']
+                keywords: ['מהירות', 'מדידה', 'ניווט', 'חישוב', 'כבידה'],
+                correctAnswer: 'הפתרון הנכון: שימוש במערכות ניווט מדויקות המודדות מהירות בזמן אמת, תוך הבנת עקרונות כוח הכבידה וחישוב המהירות הנדרשת לבריחה מכוכב הלכת.'
             },
             { 
-                id: 10, 
+                id: 10, position: 30,
                 title: 'איבדנו קשר רדיו עם כדור הארץ!', 
                 description: 'המרחק הענק מכדור הארץ (550 מיליון ק"מ) גורם לאובדן קשר רדיו. איך נשדר אותות בהספק מספיק?', 
                 requiredTypes: ['engineering', 'teamwork'], 
                 difficulty: 2,
-                keywords: ['אנטנה', 'תקשורת', 'רדיו', 'הספק', 'שידור']
+                keywords: ['אנטנה', 'תקשורת', 'רדיו', 'הספק', 'שידור'],
+                correctAnswer: 'הפתרון הנכון: שימוש באנטנות תקשורת מתקדמות בהספק גבוה וכיוון מדויק לכדור הארץ, יחד עם פרוטוקולי תקשורת חירום ותיאום צוות.'
             },
             { 
-                id: 11, 
+                id: 11, position: 33,
                 title: 'דלק מתקפא בטמפרטורות קיצוניות!', 
                 description: 'הטמפרטורה בחלל הרחוק מהשמש יורדת ל-180 מעלות מתחת לאפס. הדלק מתקפא וחוסם את הצינורות!', 
                 requiredTypes: ['physics', 'engineering'], 
                 difficulty: 2,
-                keywords: ['קור', 'דלק', 'חימום', 'זרימה', 'טמפרטורה']
+                keywords: ['קור', 'דלק', 'חימום', 'זרימה', 'טמפרטורה'],
+                correctAnswer: 'הפתרון הנכון: התקנת מערכות חימום לצינורות הדלק ושימוש בעקרונות דינמיקת נוזלים כדי לשמור על זרימה תקינה גם בטמפרטורות קיצוניות.'
             },
             { 
-                id: 12, 
+                id: 12, position: 16,
                 title: 'לחץ אטמוספרי הורס את המבנה!', 
                 description: 'הלחץ האטמוספרי של צדק פי 100 מכדור הארץ! המבנה של החללית מתחיל להתעוות ולהיסדק.', 
                 requiredTypes: ['physics', 'engineering'], 
                 difficulty: 3,
-                keywords: ['לחץ', 'מבנה', 'חוזק', 'עמידות', 'דינמיקה']
+                keywords: ['לחץ', 'מבנה', 'חוזק', 'עמידות', 'דינמיקה'],
+                correctAnswer: 'הפתרון הנכון: שימוש בעקרונות דינמיקת נוזלים להבנת השפעת הלחץ, יחד עם חיזוק המבנה באמצעות חומרים עמידים ועיצוב הנדסי מתקדם.'
             },
             { 
-                id: 13, 
+                id: 13, position: 25,
                 title: 'מערכות חיוניות נכשלות בו-זמנית!', 
                 description: 'מערכת הניווט, הקירור והתקשורת נכשלות באותו הזמן! איך נתעדף את התיקונים בזמן קצר?', 
                 requiredTypes: ['teamwork', 'engineering'], 
                 difficulty: 3,
-                keywords: ['חירום', 'עדיפות', 'תיאום', 'פרוטוקול', 'תיקון']
+                keywords: ['חירום', 'עדיפות', 'תיאום', 'פרוטוקול', 'תיקון'],
+                correctAnswer: 'הפתרון הנכון: הפעלת פרוטוקולי חירום מתואמים - קודם תיקון הניווט (בטיחות), אחר כך קירור (ציוד), ולבסוף תקשורת. תיאום צוות חיוני להצלחה.'
             }
         ];
 
-        // מכניקת קובייה חכמה - מכוונת לדילמות
+        // פונקציה להתחלת המשחק
+        function startGame() {
+            document.getElementById('introScreen').style.display = 'none';
+            document.getElementById('gameScreen').style.display = 'block';
+            updateUI();
+        }
+
+        // פונקציה להצגת הוראות
+        function showRules() {
+            document.getElementById('gameScreen').style.display = 'none';
+            document.getElementById('introScreen').style.display = 'block';
+        }
+
+        // מכניקת קובייה חכמה
         function smartDiceRoll() {
             const player = players[currentPlayer];
             let roll = Math.floor(Math.random() * 6) + 1;
             
-            // אם השחקן לא פגש דילמה 3 תורות - הגדל סיכוי לדילמה
             if (player.turnsSinceDilemma >= 3) {
-                // מצא את הדילמה הקרובה ביותר
                 const currentPos = player.position;
                 const nextDilemmas = dilemmaSquares.filter(d => d > currentPos).sort((a, b) => a - b);
                 
@@ -583,10 +730,9 @@
                     const nextDilemma = nextDilemmas[0];
                     const distanceToNext = nextDilemma - currentPos;
                     
-                    // אם הדילמה הבאה במרחק של 1-6, יש סיכוי גבוה להגיע אליה
                     if (distanceToNext <= 6) {
                         const favoredRoll = distanceToNext;
-                        if (Math.random() < 0.6) { // 60% סיכוי לקבל את הקובייה המועדפת
+                        if (Math.random() < 0.6) {
                             roll = favoredRoll;
                         }
                     }
@@ -596,7 +742,27 @@
             return roll;
         }
 
-        // בניית הלוח - 7 שורות במקום 5
+        // אנימציית קובייה
+        function animateDice(finalValue) {
+            const dice = document.getElementById('diceDisplay');
+            dice.classList.add('rolling');
+            
+            let animationStep = 0;
+            const animationSteps = 8;
+            
+            const interval = setInterval(() => {
+                dice.textContent = Math.floor(Math.random() * 6) + 1;
+                animationStep++;
+                
+                if (animationStep >= animationSteps) {
+                    clearInterval(interval);
+                    dice.textContent = finalValue;
+                    dice.classList.remove('rolling');
+                }
+            }, 60);
+        }
+
+        // בניית הלוח
         function buildBoard() {
             const board = document.getElementById('gameBoard');
             board.innerHTML = '';
@@ -615,7 +781,6 @@
                     const square = document.createElement('div');
                     square.className = 'board-square';
 
-                    // קביעת סוג המשבצת
                     if (position === 0) {
                         square.classList.add('square-start');
                     } else if (position === boardPositions - 1) {
@@ -628,7 +793,6 @@
 
                     square.innerHTML = `<span>${position}</span>`;
 
-                    // הוספת אייקונים
                     if (dilemmaSquares.includes(position)) {
                         square.innerHTML += '<span class="warning-icon">⚠️</span>';
                     } else if (position === 0) {
@@ -637,7 +801,6 @@
                         square.innerHTML += '<span class="warning-icon">🎯</span>';
                     }
 
-                    // הוספת שחקנים
                     players.forEach(player => {
                         if (player.position === position) {
                             const piece = document.createElement('div');
@@ -682,7 +845,7 @@
             });
         }
 
-        // עדכון לוח ניקוד
+        // עדכון לוח ניקוד קטן
         function updateScoreBoard() {
             const scoreBoard = document.getElementById('scoreBoard');
             scoreBoard.innerHTML = '';
@@ -701,58 +864,59 @@
                 };
 
                 card.innerHTML = `
-                    <div class="player-color" style="background-color: ${colorMap[player.color]}; ${player.color === 'player-2' ? 'border: 2px solid #4b5563;' : ''} margin: 0 auto 8px auto;"></div>
-                    <div style="font-weight: bold; font-size: 0.9rem; margin-bottom: 4px;">${player.name}</div>
-                    <div style="font-size: 1.5rem; font-weight: bold; color: #fde047; margin-bottom: 4px;">${player.score}</div>
-                    ${index === 0 ? '<div style="font-size: 0.8rem; color: #fde047;">👑 מוביל</div>' : ''}
-                    <div style="font-size: 0.8rem; color: #d1d5db;">מיקום: ${player.position}</div>
+                    <div class="player-color" style="background-color: ${colorMap[player.color]}; ${player.color === 'player-2' ? 'border: 2px solid #4b5563;' : ''} margin: 0 auto 4px auto;"></div>
+                    <div style="font-weight: bold; font-size: 0.8rem;">${player.name}</div>
+                    <div style="font-size: 1.2rem; font-weight: bold; color: #fde047;">${player.score}</div>
+                    ${index === 0 ? '<div style="font-size: 0.7rem; color: #fde047;">👑</div>' : ''}
                 `;
                 scoreBoard.appendChild(card);
             });
         }
 
-        // עדכון פקדים
-        function updateControls() {
-            const controls = document.getElementById('gameControls');
+        // עדכון פקדי קובייה
+        function updateDiceControls() {
+            document.getElementById('currentPlayerName').textContent = players[currentPlayer].name;
             
-            controls.innerHTML = `
-                <div class="current-player">
-                    תור של: <span style="color: #fde047; font-weight: bold;">${players[currentPlayer].name}</span>
-                </div>
-                ${bonusTurn ? '<p style="color: #86efac; font-weight: bold; margin-bottom: 10px;">🎉 תור בונוס! הצלחת לפתור את הדילמה!</p>' : ''}
-                <p style="color: #d1d5db; margin-bottom: 16px; font-size: 0.9rem;">
-                    ${bonusTurn ? 'התור הבונוס שלך - הטילי שוב קובייה!' : 'לחץ על הכפתור כדי להטיל קובייה ולזוז על הלוח'}
-                </p>
-                <button onclick="handlePlayerTurn()" class="game-button ${bonusTurn ? 'bonus-button' : ''}" ${currentDilemma ? 'disabled' : ''}>
-                    ${bonusTurn ? '🎲🎉 הטל קובייה - תור בונוס!' : '🎲 הטל קובייה וזוז'}
-                </button>
-                <p style="color: #9ca3af; margin-top: 8px; font-size: 0.8rem;">ערך קובייה אחרון: ${diceValue}</p>
-            `;
+            const bonusMessage = document.getElementById('bonusMessage');
+            const rollButton = document.getElementById('rollButton');
+            
+            if (bonusTurn) {
+                bonusMessage.style.display = 'block';
+                rollButton.textContent = '🎲🎉 הטל קובייה - תור בונוס!';
+                rollButton.className = 'game-button bonus-button';
+            } else {
+                bonusMessage.style.display = 'none';
+                rollButton.textContent = '🎲 הטל קובייה וזוז';
+                rollButton.className = 'game-button';
+            }
         }
 
-        // הטלת קובייה ותנועה - עם הקובייה החכמה
+        // הטלת קובייה ותנועה
         function handlePlayerTurn() {
             if (currentDilemma) return;
 
-            diceValue = smartDiceRoll(); // השתמש בקובייה החכמה
-            addLog(`${players[currentPlayer].name} הטיל קובייה וקיבל: ${diceValue}`);
+            diceValue = smartDiceRoll();
+            animateDice(diceValue);
             
-            movePlayer(diceValue);
+            setTimeout(() => {
+                addLog(`${players[currentPlayer].name} הטיל קובייה וקיבל: ${diceValue}`);
+                movePlayer(diceValue);
 
-            if (bonusTurn) {
-                bonusTurn = false;
-                setTimeout(() => {
-                    currentPlayer = (currentPlayer + 1) % players.length;
-                    updateUI();
-                }, 1000);
-            } else {
-                setTimeout(() => {
-                    if (!currentDilemma) {
+                if (bonusTurn) {
+                    bonusTurn = false;
+                    setTimeout(() => {
                         currentPlayer = (currentPlayer + 1) % players.length;
                         updateUI();
-                    }
-                }, 1000);
-            }
+                    }, 1000);
+                } else {
+                    setTimeout(() => {
+                        if (!currentDilemma) {
+                            currentPlayer = (currentPlayer + 1) % players.length;
+                            updateUI();
+                        }
+                    }, 1000);
+                }
+            }, 500);
         }
 
         // תנועת שחקן
@@ -761,22 +925,22 @@
             const newPosition = Math.min(player.position + steps, boardPositions - 1);
             player.position = newPosition;
 
-            // עדכון מונה תורות מבלי דילמה
             if (!dilemmaSquares.includes(newPosition)) {
                 player.turnsSinceDilemma++;
             } else {
-                player.turnsSinceDilemma = 0; // איפוס המונה
+                player.turnsSinceDilemma = 0;
             }
 
-            // בדיקת דילמה
+            // בדיקת דילמה - כל משבצת דילמה מקושרת לשאלה ספציפית
             if (dilemmaSquares.includes(newPosition)) {
-                const randomDilemma = dilemmaCards[Math.floor(Math.random() * dilemmaCards.length)];
-                currentDilemma = randomDilemma;
-                showDilemma();
-                addLog(`${player.name} נתקל בדילמה: ${randomDilemma.title}`);
+                const specificDilemma = dilemmaCards.find(d => d.position === newPosition);
+                if (specificDilemma) {
+                    currentDilemma = specificDilemma;
+                    showDilemma();
+                    addLog(`${player.name} נתקל בדילמה: ${specificDilemma.title}`);
+                }
             }
 
-            // בדיקת ניצחון
             if (newPosition >= boardPositions - 1) {
                 addLog(`🎉 ${player.name} הצליח לברוח מכוכב צדק ונצח במשחק!`);
                 player.score += 100;
@@ -845,7 +1009,6 @@
         function selectCard(cardId) {
             selectedCard = cardId;
             
-            // עדכון ויזואלי
             knowledgeCards.forEach(card => {
                 const cardElement = document.getElementById(`card-${card.id}`);
                 if (card.id === cardId) {
@@ -855,7 +1018,6 @@
                 }
             });
 
-            // הצגת רמז אם נדרש
             updateHintDisplay();
             updateSolveButton();
         }
@@ -865,7 +1027,6 @@
             showHint = !showHint;
             updateHintDisplay();
             
-            // עדכון כפתור הרמז
             const hintButton = document.querySelector('[onclick="toggleHint()"]');
             hintButton.textContent = `💡 ${showHint ? 'הסתר רמז' : 'רמז (-1 נקודה)'}`;
         }
@@ -906,6 +1067,10 @@
             const feedback = evaluateAnswer();
             showFeedback(feedback);
 
+            // רישום התשובה ביומן
+            const selectedCardName = knowledgeCards.find(c => c.id === selectedCard).name;
+            addLog(`${players[currentPlayer].name} בחר: "${selectedCardName}" והסביר: "${explanation.substring(0, 50)}..."`);
+
             let bonusSteps = 0;
             let points = 0;
             let hintPenalty = showHint ? 1 : 0;
@@ -926,11 +1091,9 @@
                 addLog(`${players[currentPlayer].name} זוכה ב-${bonusSteps} צעדי בונוס ו-${points} נקודות!`);
             }
 
-            // עדכון נקודות השחקן
             players[currentPlayer].score += points;
             players[currentPlayer].knowledge = Math.max(0, players[currentPlayer].knowledge - 1);
 
-            // התקדמות נוספת
             if (bonusSteps > 0) {
                 setTimeout(() => {
                     movePlayer(bonusSteps);
@@ -946,12 +1109,11 @@
             }
         }
 
-        // הערכת התשובה - משופרת עם מילות מפתח מדעיות
+        // הערכת התשובה
         function evaluateAnswer() {
             const card = knowledgeCards.find(c => c.id === selectedCard);
             const explanationWords = explanation.trim().toLowerCase().split(' ');
 
-            // בדיקת מילות מפתח ספציפיות לכל דילמה
             const hasRelevantWords = currentDilemma.keywords.some(keyword => 
                 explanationWords.some(word => word.includes(keyword))
             );
@@ -979,7 +1141,13 @@
             if (feedback.status === 'correct') feedbackClass = 'feedback-correct';
             else if (feedback.status === 'partial') feedbackClass = 'feedback-partial';
             
-            feedbackArea.innerHTML = `<div class="feedback-box ${feedbackClass}">${feedback.message}</div>`;
+            feedbackArea.innerHTML = `
+                <div class="feedback-box ${feedbackClass}">${feedback.message}</div>
+                <div class="correct-answer">
+                    <strong>💡 הפתרון המומלץ:</strong><br>
+                    ${currentDilemma.correctAnswer}
+                </div>
+            `;
             cardSelection.style.display = 'none';
         }
 
@@ -995,7 +1163,7 @@
         // הוספה ליומן
         function addLog(message) {
             gameLog.push(message);
-            if (gameLog.length > 5) gameLog.shift();
+            if (gameLog.length > 6) gameLog.shift();
             
             const logElement = document.getElementById('gameLog');
             logElement.innerHTML = gameLog.map(entry => 
@@ -1015,6 +1183,7 @@
             bonusTurn = false;
             gameLog = [];
             currentDilemma = null;
+            usedDilemmas = [];
             document.getElementById('dilemmaModal').style.display = 'none';
             
             addLog('משחק חדש התחיל!');
@@ -1026,12 +1195,11 @@
             buildBoard();
             updatePlayersInfo();
             updateScoreBoard();
-            updateControls();
+            updateDiceControls();
         }
 
         // אתחול המשחק
-        updateUI();
-        addLog('המשחק התחיל! בהצלחה!');
+        addLog('המשחק מוכן! לחצו "התחל משחק" כדי להתחיל');
     </script>
 </body>
 </html>
